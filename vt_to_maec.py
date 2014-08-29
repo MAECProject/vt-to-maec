@@ -113,7 +113,7 @@ package_result = vtp.vt_report_to_maec_package(vt_report)
 
 # generate output
 if write_mode == "xml":
-    output_string = package_result.to_xml(True, {"https://github.com/MAECProject/virustotal-to-maec": "VirusTotalToMAEC"}, True)
+    output_string = package_result.to_xml(True, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"}, True)
 elif write_mode == "json":
     output_string = package_result.to_json()
 
