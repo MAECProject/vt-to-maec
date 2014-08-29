@@ -21,6 +21,7 @@ from maec.package.analysis import Analysis
 from maec.package.malware_subject import MalwareSubject
 from cybox.core.object import Object
 from cybox.common.tools import ToolInformation
+from cybox.utils import Namespace
 import requests
 import hashlib
 import sys
@@ -61,6 +62,9 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
 
 def vt_report_to_maec_package(vt_report_input):
     """Accept a VirusTotal report (as a Python structure) and return a corresponding MAEC Package API object."""
+    NS = Namespace("https://github.com/MAECProject/vt-to-maec", "VirusTotalToMAEC")
+    maec.utils.set_id_namespace(NS)
+    
     package = Package()
 
     # if only one result, make it a list of one result
