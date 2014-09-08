@@ -7,7 +7,7 @@
 #For more information, please refer to the terms.txt file.
 
 #VirusTotal MAEC Packager
-#Updated 08/29/2014 for MAEC v4.1 and CybOX v2.1
+#Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
 
 #Standalone module for fetching VirusTotal results and converting them to MAEC packages
 
@@ -47,7 +47,7 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     
     # if the module var is not set and 
     if api_key is None:
-        raise Exception("No VirusTotal API key set. Supply it as an argument or set the API_KEY module variable")
+        raise APIKeyException("No VirusTotal API key set. Supply it as an argument or set the API_KEY module variable")
         
     if type(input_md5) == list:
         input_md5 = ",".join(input_md5)
@@ -56,7 +56,7 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     response = requests.get("http://www.virustotal.com/vtapi/v2/file/report", params=parameters, proxies=proxies)
     
     if response.text == "":
-        raise Exception("Empty VirusTotal response. Your API key may be incorrect.")
+        raise APIKeyException("Empty VirusTotal response. Your API key may be incorrect.")
     
     return response.json()
 
@@ -106,8 +106,9 @@ def vt_report_to_maec_package(vt_report_input):
         
         # create the analysis and add it to the subject
         analysis = Analysis()
-        analysis.type = 'triage'
-        analysis.method = 'dynamic'
+        analysis.type_ = 'triage'
+        analysis.method = 'static'
+        analysis.complete_datetime = vt_report["scan_date"].replace(" ", "T")
         analysis.add_tool(ToolInformation.from_dict({'id' : maec.utils.idgen.create_id(prefix="tool"),
                            'vendor' : 'VirusTotal',
                            'name' : 'VirusTotal' }))
@@ -125,3 +126,6 @@ def vt_report_to_maec_package(vt_report_input):
         package.add_malware_subject(malware_subject)
         
     return package
+
+class APIKeyException(Exception):
+    pass

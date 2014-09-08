@@ -14,18 +14,18 @@
 
 #VirusTotal Converter Script
 #Copyright 2014, MITRE Corp
-#v0.95 - BETA
-#Updated 08/29/2014 for MAEC v4.1 and CybOX v2.1
+#v0.10 - BETA
+#Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
 
 """VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility
-v0.95 BETA // Supports MAEC v4.1 and CybOX v2.1
+v0.10 BETA // Supports MAEC v4.1 and CybOX v2.1
+
+IMPORTANT: Before use, you MUST edit this script to contain your VirusTotal API key (in the API_KEY variable).
 
 Given a list of MD5 hashes and/or file paths, this script fetches the files from VirusTotal
 and outputs MAEC data about each file.
 
-You must enter your VirusTotal API key into the script before use.
-
-Usage: python vt_to_maec.py [-j] [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]
+Usage: python vt_to_maec.py [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]
 
 Use the -h option followed by up to four MD5 arguments
 and/or
@@ -34,19 +34,13 @@ Use the -f option followed by up to four paths to malware samples
 -h: starts the list of MD5 hashes
 -f: starts the list of malware sample paths
 -o: specifies the output file path
--j: specifies JSON output instead of default XML
 
 The VirusTotal service allows a maximum of 4 samples per submission."""
 
-
-#############################################################################
-#! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
-
+#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 # Before you can use this script, you must supply a VirusTotal API key
 API_KEY = "REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
-
-#! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! 
-#############################################################################
+#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#! 
 
 import virustotal_maec_packager as vtp
 import sys
@@ -58,7 +52,7 @@ USAGE_TEXT = __doc__
 
 proxies = {
 #           "http": "http://example.com:80",
-#           "https": "http://example.com:80",
+#           "https": "http://example.com:80"
            }
 
 md5_list = []
@@ -81,8 +75,9 @@ for i in range(0,len(args)):
         read_mode = "hash"
     elif args[i] == '-o':
         read_mode = "output"
-    elif args[i] == '-j':
-        write_mode = "json"
+# JSON disabled; currently experimental in python-cybox
+#    elif args[i] == '-j':
+#        write_mode = "json"
     else:
         if read_mode == "hash":
             md5_list.append(args[i])
@@ -108,14 +103,21 @@ if len(md5_list) > 4:
     sys.exit(1)
 
 # fetch VT report and generate Package object
-vt_report = vtp.vt_report_from_md5(md5_list, API_KEY, proxies=proxies)
+try:
+    vt_report = vtp.vt_report_from_md5(md5_list, API_KEY, proxies=proxies)
+except vtp.APIKeyException as ex:
+    sys.stderr.write("VirusTotal API request failed. You must edit this script with your VirusTotal API key in the API_KEY variable.")
+    sys.exit();
+    
 package_result = vtp.vt_report_to_maec_package(vt_report)
 
 # generate output
 if write_mode == "xml":
     output_string = package_result.to_xml(True, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"}, True)
-elif write_mode == "json":
-    output_string = package_result.to_json()
+
+# JSON disabled; currently experimental in python-cybox
+#elif write_mode == "json":
+#    output_string = package_result.to_json()
 
 # push output to file or stdout
 if output_path is not None:

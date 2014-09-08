@@ -2,11 +2,13 @@ vt-to-maec
 ==========
 
 VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility  
-v0.95 BETA - Updated 08/29/2014  
+v0.10 BETA - Updated 09/08/2014  
 
 Copyright (c) 2014 The MITRE Corporation  
 BY USING THE VIRUSTOTAL TO MAEC SCRIPT AND MODULE, YOU SIGNIFY YOUR ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE.  IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SCRIPT.  
 See `terms.txt` for terms of use.
+
+**IMPORTANT:** Before use, you must edit this script to contain your VirusTotal API key (in the `API_KEY` variable in `vt_to_maec`).
 
 **MAEC** - http://maec.mitre.org  
 **VirusTotal** - https://www.virustotal.com
@@ -14,13 +16,15 @@ See `terms.txt` for terms of use.
 Given a list of MD5 hashes and/or file paths, this script fetches the VirusTotal reports for each file and outputs MAEC data about each file.  
 Compatible with MAEC Schema v4.1 & CybOX 2.1
 
-Requirements:
+#Requirements
 
 * python-maec >= v4.1.0.7
 * python-cybox >= v2.1.0.6
 * Before you can run the `vt_to_maec.py` script for the first time, you must get a VirusTotal API key from https://www.virustotal.com and use it as the `API_KEY` variable at the top of the script.
 
-Usage: `python vt_to_maec.py [-j] [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]`
+#Usage
+
+`python vt_to_maec.py [-j] [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]`
 
 Use the `-h` option followed by up to four MD5 arguments and/or the `-f` option followed by up to four paths to malware samples.
 
@@ -30,6 +34,8 @@ Use the `-h` option followed by up to four MD5 arguments and/or the `-f` option 
 * `-j`: specifies JSON output instead of default XML
 
 The VirusTotal service allows a maximum of 4 samples per submission.
+
+#Standalone Module
 
 The `virustotal_maec_packager.py` file can be used as a stand-alone module that exposes the following functions:
 
