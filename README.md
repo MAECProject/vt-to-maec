@@ -31,7 +31,6 @@ Use the `-h` option followed by up to four MD5 arguments and/or the `-f` option 
 * `-h`: starts the list of MD5 hashes
 * `-f`: starts the list of malware sample paths
 * `-o`: specifies the output file path
-* `-j`: specifies JSON output instead of default XML
 
 The VirusTotal service allows a maximum of 4 samples per submission.
 
