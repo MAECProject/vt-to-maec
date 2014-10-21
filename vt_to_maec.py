@@ -42,7 +42,7 @@ The VirusTotal service allows a maximum of 4 samples per submission."""
 API_KEY = "REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
 #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#! 
 
-import virustotal_maec_packager as vtp
+import virustotal_to_maec.virustotal_maec_packager as vtp
 import sys
 
 def usage():

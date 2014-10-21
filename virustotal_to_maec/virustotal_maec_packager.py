@@ -60,7 +60,7 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     
     return response.json()
 
-def vt_report_to_maec_package(vt_report_input, options):
+def vt_report_to_maec_package(vt_report_input, options = None):
     """Accept a VirusTotal report (as a Python structure) and return a corresponding MAEC Package API object."""
     NS = Namespace("https://github.com/MAECProject/vt-to-maec", "VirusTotalToMAEC")
     maec.utils.set_id_namespace(NS)
