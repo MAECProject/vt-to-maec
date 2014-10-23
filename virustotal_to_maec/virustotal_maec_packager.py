@@ -4,7 +4,7 @@
 #OF THE TERMS AND CONDITIONS OF USE.  IF YOU DO NOT AGREE TO THESE TERMS, DO
 #NOT USE THE VIRSUTOTAL MAEC PACKER MODULE.
 
-#For more information, please refer to the terms.txt file.
+#For more information, please refer to the LICENSE.txt file.
 
 #VirusTotal MAEC Packager
 #Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1

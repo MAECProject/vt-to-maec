@@ -1,3 +1,16 @@
+# Copyright (c) 2014, The MITRE Corporation. All rights reserved.
+
+#BY USING THE VIRSUTOTAL MAEC PACKER MODULE SCRIPT, YOU SIGNIFY YOUR ACCEPTANCE
+#OF THE TERMS AND CONDITIONS OF USE.  IF YOU DO NOT AGREE TO THESE TERMS, DO
+#NOT USE THE VIRSUTOTAL MAEC PACKER MODULE.
+
+#For more information, please refer to the LICENSE.txt file.
+
+#VirusTotal to MAEC Standalone Package
+#Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
+
+#Standalone package for fetching VirusTotal results and converting them to MAEC packages
+
 import virustotal_maec_packager as vtpack
 from maec.package.package import Package
 import json

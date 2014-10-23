@@ -2,7 +2,7 @@ vt-to-maec
 ==========
 
 VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility  
-v0.10 BETA - Updated 09/08/2014  
+v0.11 BETA - Updated 09/08/2014  
 
 Copyright (c) 2014 The MITRE Corporation  
 BY USING THE VIRUSTOTAL TO MAEC SCRIPT AND MODULE, YOU SIGNIFY YOUR ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE.  IF YOU DO NOT AGREE TO THESE TERMS, DO NOT USE THE SCRIPT.  
@@ -24,23 +24,20 @@ Compatible with MAEC Schema v4.1 & CybOX 2.1
 
 #Usage
 
-`python vt_to_maec.py [-j] [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]`
+`python vt_to_maec.py <input binary file path or MD5> [--md5] [--verbose]`
 
-Use the `-h` option followed by up to four MD5 arguments and/or the `-f` option followed by up to four paths to malware samples.
-
-* `-h`: starts the list of MD5 hashes
-* `-f`: starts the list of malware sample paths
-* `-o`: specifies the output file path
-
-The VirusTotal service allows a maximum of 4 samples per submission.
+`--md5`, `--hash`: specifies that the input is an MD5 hash rather than a binary file path.
+`--deduplicate`, `-dd`: deduplicate objects in MAEC output
+`--dereference`, `-dr`: dereference the MAEC output
+`--normalize`, `-n`: normalize the MAEC output
 
 #Standalone Module
 
-The `virustotal_maec_packager.py` file can be used as a stand-alone module that exposes the following functions:
+The `virus_total_to_maec` package exposes several helper functions:
 
-* `file_to_md5(filepath)`
-  * Returns a hash of the file at `filepath` as an MD5 hex string.
-* `vt_report_from_md5(input_md5, api_key, proxies=None)`
-  * Accepts a string of comma-separated MD5 hashes or a list of MD5 strings. Fetches reports from VirusTotal (using the MD5 values and the specified VirusTotal API key) and returns a dictionary or list of dictionaries built from the VirusTotal report JSON. Accepts an optional dictionary of proxies like `{ "http": ..., "https": ... }`. The `api_key` parameter is required unless the module-wide variable `API_KEY` has been set.
-* `vt_report_to_maec_package(vt_report)`
-  * Accepts a VirusTotal report (as a Python structure) and returns a corresponding MAEC Package object from `python-maec`.
+  * `generate_package_from_binary_filepath` - given an filepath, return a python-maec Pacakge object
+  * `generate_package_from_md5` - given an MD5 string, return a python-maec Pacakge object
+  * `generate_package_from_report_string` - given a VirusTotal JSON report, return a python-maec Pacakge object
+  * `set_proxies` - optionally called to supply proxy information to the package; supplied as a dictionary like `{ "http": "http://example.com:80", ... }`
+  * `set_api_key` - called to supply an API key string to the module
+  

@@ -25,17 +25,8 @@ IMPORTANT: Before use, you MUST edit this script to contain your VirusTotal API 
 Given a list of MD5 hashes and/or file paths, this script fetches the files from VirusTotal
 and outputs MAEC data about each file.
 
-Usage: python vt_to_maec.py [-h MD5_HASH ...] [-f FILEPATH ...] [-o FILEPATH]
-
-Use the -h option followed by up to four MD5 arguments
-and/or
-Use the -f option followed by up to four paths to malware samples
-
--h: starts the list of MD5 hashes
--f: starts the list of malware sample paths
--o: specifies the output file path
-
-The VirusTotal service allows a maximum of 4 samples per submission."""
+Usage: python vt_to_maec.py [--hash] input output
+"""
 
 #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 # Before you can use this script, you must supply a VirusTotal API key
@@ -44,86 +35,43 @@ API_KEY = "REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
 
 import virustotal_to_maec.virustotal_maec_packager as vtp
 import sys
-
-def usage():
-    print USAGE_TEXT
-
-USAGE_TEXT = __doc__
+import virustotal_to_maec
+import argparse
+from maec.misc.options import ScriptOptions
 
 proxies = {
-#           "http": "http://example.com:80",
-#           "https": "http://example.com:80"
-           }
+        #"http":"http://example.com:80",
+        #"https":"http://example.com:80"
+    }
 
-md5_list = []
-read_mode = None
-write_mode = "xml"
-output_path = None
-has_input = False
+parser = argparse.ArgumentParser(description="VirusTotal to MAEC Translator")
+parser.add_argument("input", help="the MD5 hash or path of the input binary file")
+parser.add_argument("output", help="the name of the file to which the MAEC XML output will be written")
+parser.add_argument("--md5", "--hash", help="indicates input is an MD5 hash of the file to be fetched and analyzed", action="store_true", default=False)
+parser.add_argument("--verbose", "-v", help="enable verbose error output mode", action="store_true", default=False)
+parser.add_argument("--deduplicate", "-dd", help="deduplicate the MAEC output (Objects only)", action="store_true", default=False)
+parser.add_argument("--normalize", "-n", help="normalize the MAEC output (Objects only)", action="store_true", default=False)
+parser.add_argument("--dereference", "-dr", help="dereference the MAEC output (Objects only)", action="store_true", default=False)
+args = parser.parse_args()
 
-# read and process command args
-args = sys.argv[1:]
+# Build up the options instance based on the command-line input
+options = ScriptOptions()
+options.deduplicate_bundles = args.deduplicate
+options.normalize_bundles = args.normalize
+options.dereference_bundles = args.dereference
 
-if len(args) < 2:
-    usage()
-    sys.exit(1)
-    
-for i in range(0,len(args)):
-    if args[i] == '-f':
-        read_mode = "file"
-    elif args[i] == '-h':
-        read_mode = "hash"
-    elif args[i] == '-o':
-        read_mode = "output"
-# JSON disabled; currently experimental in python-cybox
-#    elif args[i] == '-j':
-#        write_mode = "json"
-    else:
-        if read_mode == "hash":
-            md5_list.append(args[i])
-        elif read_mode == "file":
-            md5_list.append(vtp.file_to_md5(args[i]))
-        elif read_mode == "output":
-            output_path = args[i]
-            read_mode = ""
-        else:
-            usage()
-            sys.exit(1)
-        has_input = True
-
-# no hashes or files specified
-if not has_input:
-    usage()
-    sys.exit(1)
-
-# too many targets; VT only allows 4
-if len(md5_list) > 4:
-    sys.stderr.write("ERROR: cannot specify more than 4 inputs per run\n")
-    sys.stderr.flush()
-    sys.exit(1)
+virustotal_to_maec.set_api_key(API_KEY)
+virustotal_to_maec.set_proxies(proxies)
 
 # fetch VT report and generate Package object
 try:
-    vt_report = vtp.vt_report_from_md5(md5_list, API_KEY, proxies=proxies)
+    if args.md5:
+        package_result = virustotal_to_maec.generate_package_from_md5(args.input, options)
+    else:
+        package_result = virustotal_to_maec.generate_package_from_binary_filepath(args.input, options)
 except vtp.APIKeyException as ex:
     sys.stderr.write("VirusTotal API request failed. You must edit this script with your VirusTotal API key in the API_KEY variable.")
     sys.exit();
-    
-package_result = vtp.vt_report_to_maec_package(vt_report)
 
-# generate output
-if write_mode == "xml":
-    output_string = package_result.to_xml(True, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"}, True)
-
-# JSON disabled; currently experimental in python-cybox
-#elif write_mode == "json":
-#    output_string = package_result.to_json()
-
-# push output to file or stdout
-if output_path is not None:
-    fd = open(output_path, "w")
-    fd.write(output_string)
-    fd.close()
-else:
-    print output_string
-    
+package_result.to_xml_file(args.output, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"})
+print "Wrote output to " + args.output
