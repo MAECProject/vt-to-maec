@@ -4,7 +4,7 @@
 from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
 
-INIT_FILE = join(dirname(abspath(__file__)), 'virstotal_to_maec', '__init__.py')
+INIT_FILE = join(dirname(abspath(__file__)), 'virustotal_to_maec', '__init__.py')
 
 def get_version():
     with open(INIT_FILE) as f:
