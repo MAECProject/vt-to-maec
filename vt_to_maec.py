@@ -14,7 +14,7 @@
 
 #VirusTotal Converter Script
 #Copyright 2014, MITRE Corp
-#v0.10 - BETA
+#v0.11 - BETA
 #Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
 
 """VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility

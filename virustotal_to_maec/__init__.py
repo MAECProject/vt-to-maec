@@ -15,7 +15,7 @@ import virustotal_maec_packager as vtpack
 from maec.package.package import Package
 import json
 
-__version__ = "0.97"
+__version__ = "0.11"
 
 proxies = {}
 api_key = ""
