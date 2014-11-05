@@ -34,10 +34,11 @@ Usage
 
 ``python vt_to_maec.py <input binary file path or MD5> [--md5] [--verbose]``
 
-``--md5``, ``--hash``: specifies that the input is an MD5 hash rather
-than a binary file path. ``--deduplicate``, ``-dd``: deduplicate objects
-in MAEC output ``--dereference``, ``-dr``: dereference the MAEC output
-``--normalize``, ``-n``: normalize the MAEC output
+- ``--md5``, ``--hash``: specifies that the input is an MD5 hash rather
+than a binary file path.
+- ``--deduplicate``, ``-dd``: deduplicate objects in MAEC output
+- ``--dereference``, ``-dr``: dereference the MAEC output
+- ``--normalize``, ``-n``: normalize the MAEC output
 
 Standalone Module
 =================
