@@ -73,5 +73,8 @@ except vtp.APIKeyException as ex:
     sys.stderr.write("VirusTotal API request failed. You must edit this script with your VirusTotal API key in the API_KEY variable.")
     sys.exit();
 
-package_result.to_xml_file(args.output, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"})
+options_dict = options.to_dict()
+options_dict["Created by"] = "VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
+
+package_result.to_xml_file(args.output, {"https://github.com/MAECProject/vt-to-maec": "VirusTotalToMAEC"}, custom_header=options_dict)
 print "Wrote output to " + args.output

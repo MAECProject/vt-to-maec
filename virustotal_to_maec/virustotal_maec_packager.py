@@ -25,6 +25,7 @@ from cybox.utils import Namespace
 import requests
 import hashlib
 import sys
+from maec.misc.exceptions import APIKeyException, LookupNotFoundException
 
 API_KEY = None
 
@@ -57,6 +58,8 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     
     if response.text == "":
         raise APIKeyException("Empty VirusTotal response. Your API key may be incorrect.")
+    if response.text == "[]":
+        raise LookupNotFoundException("VirusTotal has never seen a file with MD5 " + input_md5)
     
     return response.json()
 
@@ -136,6 +139,3 @@ def vt_report_to_maec_package(vt_report_input, options = None):
                 malware_subject.dereference_bundles()
         
     return package
-
-class APIKeyException(Exception):
-    pass
