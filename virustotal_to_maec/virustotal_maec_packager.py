@@ -128,7 +128,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
         analysis.set_findings_bundle(bundle_obj.id_)
         package.add_malware_subject(malware_subject)
         
-        package.__input_namespaces__["https://github.com/MAECProject/vt-to-maec"] = "VirustTotalToMAEC"
+        package.__input_namespaces__["https://github.com/MAECProject/vt-to-maec"] = "VirusTotalToMAEC"
         
         if options:
             if options.normalize_bundles:
