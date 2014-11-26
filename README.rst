@@ -23,8 +23,8 @@ Compatible with MAEC Schema v4.1 & CybOX 2.1
 Requirements
 ============
 
--  python-maec >= v4.1.0.7
--  python-cybox >= v2.1.0.6
+-  python-maec >= v4.1.0.9
+-  python-cybox >= v2.1.0.8
 -  Before you can run the ``vt_to_maec.py`` script for the first time,
    you must get a VirusTotal API key from https://www.virustotal.com and
    use it as the ``API_KEY`` variable at the top of the script.
