@@ -4,7 +4,7 @@ vt-to-maec
 VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility
 v0.11 BETA - Updated 09/08/2014
 
-Copyright (c) 2014 The MITRE Corporation
+Copyright (c) 2015 The MITRE Corporation
 BY USING THE VIRUSTOTAL TO MAEC SCRIPT AND MODULE, YOU SIGNIFY YOUR
 ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE. IF YOU DO NOT AGREE TO
 THESE TERMS, DO NOT USE THE SCRIPT.

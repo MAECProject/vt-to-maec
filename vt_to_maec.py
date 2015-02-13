@@ -2,7 +2,7 @@
 #                                                    #
 #      VirusTotal -> MAEC XML Script                 #
 #                                                    #
-#      Copyright (c) 2014, The MITRE Corporation     #
+#      Copyright (c) 2015, The MITRE Corporation     #
 #                                                    #
 #****************************************************#
 
@@ -13,7 +13,7 @@
 #For more information, please refer to the terms.txt file.
 
 #VirusTotal Converter Script
-#Copyright 2014, MITRE Corp
+#Copyright 2015, MITRE Corp
 #v0.11 - BETA
 #Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
 
