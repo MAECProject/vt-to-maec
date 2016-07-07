@@ -13,12 +13,14 @@ See ``terms.txt`` for terms of use.
 **IMPORTANT:** Before use, you must edit this script to contain your
 VirusTotal API key (in the ``API_KEY`` variable in ``vt_to_maec``).
 
-**MAEC** - http://maec.mitre.org
-**VirusTotal** - https://www.virustotal.com
-
 Given a list of MD5 hashes and/or file paths, this script fetches the
 VirusTotal reports for each file and outputs MAEC data about each file.
-Compatible with MAEC Schema v4.1 & CybOX 2.1
+
+Compatible with MAEC Schema v4.1 & Cyber Observable eXpression (CybOX™) 2.1.
+
+* MAEC - http://maecproject.github.io/
+* VirusTotal - https://www.virustotal.com
+* CybOX - http://cyboxproject.github.io/
 
 Requirements
 ============
@@ -56,3 +58,18 @@ The ``virus_total_to_maec`` package exposes several helper functions:
    ``{ "http": "http://example.com:80", ... }``
 -  ``set_api_key`` - called to supply an API key string to the module
 
+About MAEC
+------------
+
+Malware Attribute Enumeration and Characterization (MAEC™) is a standardized language for sharing structured information about malware based upon attributes such as behaviors, artifacts, and attack patterns.
+
+The goal of the MAEC (pronounced "mike") effort is to provide a basis for transforming malware research and response. MAEC aims to eliminate the ambiguity and inaccuracy that currently exists in malware descriptions and to reduce reliance on signatures. In this way, MAEC seeks to improve human-to-human, human-to-tool, tool-to-tool, and tool-to-human communication about malware; reduce potential duplication of malware analysis efforts by researchers; and allow for the faster development of countermeasures by enabling the ability to leverage responses to previously observed malware instances. The MAEC Language enables correlation, integration, and automation.
+
+Please visit the MAEC website at http://maecproject.github.io/ for more information about the MAEC Language.
+
+Getting Help
+------------
+
+Join the public MAEC Community Email Discussion List at https://maec.mitre.org/community/discussionlist.html.
+
+Email the MAEC Developers at maec@mitre.org.
