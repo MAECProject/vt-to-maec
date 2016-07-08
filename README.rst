@@ -59,17 +59,17 @@ The ``virus_total_to_maec`` package exposes several helper functions:
 -  ``set_api_key`` - called to supply an API key string to the module
 
 About MAEC
-------------
+==========
 
 Malware Attribute Enumeration and Characterization (MAEC™) is a standardized language for sharing structured information about malware based upon attributes such as behaviors, artifacts, and attack patterns.
 
 The goal of the MAEC (pronounced "mike") effort is to provide a basis for transforming malware research and response. MAEC aims to eliminate the ambiguity and inaccuracy that currently exists in malware descriptions and to reduce reliance on signatures. In this way, MAEC seeks to improve human-to-human, human-to-tool, tool-to-tool, and tool-to-human communication about malware; reduce potential duplication of malware analysis efforts by researchers; and allow for the faster development of countermeasures by enabling the ability to leverage responses to previously observed malware instances. The MAEC Language enables correlation, integration, and automation.
 
-Please visit the MAEC website at http://maecproject.github.io/ for more information about the MAEC Language.
+Please visit the `MAEC website <https://maecproject.github.io/>`_ for more information about the MAEC Language.
 
 Getting Help
-------------
+============
 
-Join the public MAEC Community Email Discussion List at https://maec.mitre.org/community/discussionlist.html.
+Join the public `MAEC Community Email Discussion List <https://maec.mitre.org/community/discussionlist.html>`_.
 
 Email the MAEC Developers at maec@mitre.org.
