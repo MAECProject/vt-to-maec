@@ -102,7 +102,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
         
         # set the object as the defined object
         object_dict = {}
-        object_dict['id'] = maec.utils.idgen.create_id(prefix="object")
+        object_dict['id'] = mixbox.idgen.create_id(prefix="object")
         object_dict['properties'] = file_dict
         
         # bind the object to the malware subject object
@@ -113,7 +113,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
         analysis.type_ = 'triage'
         analysis.method = 'static'
         analysis.complete_datetime = vt_report["scan_date"].replace(" ", "T")
-        analysis.add_tool(ToolInformation.from_dict({'id' : maec.utils.idgen.create_id(prefix="tool"),
+        analysis.add_tool(ToolInformation.from_dict({'id' : mixbox.idgen.create_id(prefix="tool"),
                            'vendor' : 'VirusTotal',
                            'name' : 'VirusTotal' }))
         malware_subject.add_analysis(analysis)
