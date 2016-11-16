@@ -13,16 +13,7 @@
 
 """VirusTotal fetcher and VirusTotal-to-MAEC conversion module"""
 
-import maec.utils
 import mixbox.idgen
-from maec.bundle.bundle import Bundle
-from maec.package.package import Package
-from maec.bundle.av_classification import AVClassification
-from maec.package.analysis import Analysis
-from maec.package.malware_subject import MalwareSubject
-from cybox.core.object import Object
-from cybox.common.tools import ToolInformation
-from cybox.utils import Namespace
 import requests
 import hashlib
 import json
