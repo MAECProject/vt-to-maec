@@ -25,6 +25,7 @@ from cybox.common.tools import ToolInformation
 from cybox.utils import Namespace
 import requests
 import hashlib
+import json
 import sys
 from maec.misc.exceptions import APIKeyException, LookupNotFoundException
 
@@ -40,6 +41,7 @@ def file_to_md5(path, blocksize=65536):
         buf = fd.read(blocksize)
     return hasher.hexdigest()
     
+
 def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     """Accept a string of comma-separated MD5 hashes or a list of MD5 strings to use in fetching a report to VirusTotal.
     Return a dictionary or list of dictionaries based on the fetched report's JSON.
@@ -61,16 +63,21 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
         raise APIKeyException("Empty VirusTotal response. Your API key may be incorrect.")
     if response.text == "[]":
         raise LookupNotFoundException("VirusTotal has never seen a file with MD5 " + input_md5)
-    
+
     return response.json()
 
-def vt_report_to_maec_package(vt_report_input, options = None):
-    """Accept a VirusTotal report (as a Python structure) and return a corresponding MAEC Package API object."""
-    NS = Namespace("https://github.com/MAECProject/vt-to-maec", "VirusTotalToMAEC")
-    mixbox.idgen.set_id_namespace(NS)
-    
-    package = Package()
 
+#in this version, the function returns a mere dictionary
+def vt_report_to_maec_package(vt_report_input, options = None):
+   
+   #creating package structure and inserting all package level fields
+    package = {}
+    package['id'] = mixbox.idgen.create_id(prefix="package").split(":")[1]
+    package['schema_version'] = "5.0"
+    package['malware_instances'] = []
+    package['cybox'] = {}
+    package['cybox']['objects'] = {}
+ 
     # if only one result, make it a list of one result
     if type(vt_report_input) != list:
         vt_report_list = [vt_report_input]
@@ -79,7 +86,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
 
     for idx, vt_report in enumerate(vt_report_list):
         # if VirusTotal has never seen this MD5
-        if vt_report["response_code"] == 0:
+        if vt_report['response_code'] == 0:
             sys.stderr.write("WARNING: Skipping file #" + str(idx+1) + " (" + vt_report["resource"] + "); this MD5 is unknown to VirusTotal\n")
             sys.stderr.flush();
             continue
@@ -88,55 +95,51 @@ def vt_report_to_maec_package(vt_report_input, options = None):
                              vt_report.get("verbose_message", "no message provided") + "\n")
             sys.stderr.flush();
             continue
-        
-        malware_subject = MalwareSubject()
-        
-        # create the file object and add hashes
-        file_dict = {}
-        file_dict['xsi:type'] = 'WindowsExecutableFileObjectType'
-        file_dict['hashes'] = [
-            {'type' : 'MD5', 'simple_hash_value': vt_report["md5"] },
-            {'type' : 'SHA1', 'simple_hash_value': vt_report["sha1"] },
-            {'type' : 'SHA256', 'simple_hash_value': vt_report["sha256"] }
-        ]
-        
-        # set the object as the defined object
-        object_dict = {}
-        object_dict['id'] = mixbox.idgen.create_id(prefix="object")
-        object_dict['properties'] = file_dict
-        
-        # bind the object to the malware subject object
-        malware_subject.set_malware_instance_object_attributes(Object.from_dict(object_dict))
-        
-        # create the analysis and add it to the subject
-        analysis = Analysis()
-        analysis.type_ = 'triage'
-        analysis.method = 'static'
-        analysis.complete_datetime = vt_report["scan_date"].replace(" ", "T")
-        analysis.add_tool(ToolInformation.from_dict({'id' : mixbox.idgen.create_id(prefix="tool"),
-                           'vendor' : 'VirusTotal',
-                           'name' : 'VirusTotal' }))
-        malware_subject.add_analysis(analysis)
-        
-        bundle_obj = Bundle()
-        
-        for vendor, scan in vt_report["scans"].items():
-            if scan["result"] is not None:
-                bundle_obj.add_av_classification(AVClassification.from_dict({ 'classification_name' : scan["result"], 'vendor' : vendor }))
-        
-        # add bundle to subject, bundle to analysis, and subject to package
-        malware_subject.add_findings_bundle(bundle_obj)
-        analysis.set_findings_bundle(bundle_obj.id_)
-        package.add_malware_subject(malware_subject)
-        
-        package.__input_namespaces__["https://github.com/MAECProject/vt-to-maec"] = "VirusTotalToMAEC"
-        
-        if options:
-            if options.normalize_bundles:
-                malware_subject.normalize_bundles()
-            if options.deduplicate_bundles:
-                malware_subject.deduplicate_bundles()
-            if options.dereference_bundles:
-                malware_subject.dereference_bundles()
-        
+            
+        #create instance object reference ID for the malware instance
+        instance_object_ref = mixbox.idgen.create_id(prefix="malware_instance_object").split(":")[1]
+
+        #add malware instance to package
+        package['malware_instances'].append(
+            {
+                'id': mixbox.idgen.create_id(prefix="malware_instance").split(":")[1],
+                'instance_object_ref': [ instance_object_ref ]
+            })
+
+        #create cyber observable object dictionary - all AV classifications are nested under here
+        package['cybox']['objects'][instance_object_ref] = {
+            'type':'file',
+            'hashes':{
+                'MD5': vt_report['md5'],
+                'SHA-1': vt_report['sha1'],
+                'SHA-256': vt_report['sha256']
+            },
+            'extended_properties':{
+                'x-maec-avclass': []
+            }
+        }
+
+        #just getting a shorter reference to use
+        maec_av = package['cybox']['objects'][instance_object_ref]['extended_properties']['x-maec-avclass']
+
+        #iterate through all ofg VT results, add classifications to cyber observable object
+        for k,v in vt_report['scans'].items():
+            tmp = {}
+            tmp['classification_name'] = v['result']
+            tmp['scan_date'] = vt_report['scan_date']
+            tmp['is_detected'] = v['detected']
+            tmp['av_name'] = k
+            tmp['av_vendor'] = k
+            tmp['av_engine_version'] = v['version']
+            tmp['av_definition_version'] = v['update']
+
+            maec_av.append(tmp)
+       
+    try:
+        json.loads(json.dumps(package))       
+    except ValueError, e:
+        sys.stderr.write("WARNING: MAEC package dictionary created from Virus Total results was NOT verified as proper json format.")
+        sys.stderr.write("\n"+ str(e) + "\n")
+        sys.stderr.flush();
+
     return package
