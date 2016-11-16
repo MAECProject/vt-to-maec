@@ -66,8 +66,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
     package['id'] = mixbox.idgen.create_id(prefix="package").split(":")[1]
     package['schema_version'] = "5.0"
     package['malware_instances'] = []
-    package['cybox'] = {}
-    package['cybox']['objects'] = {}
+    package['objects'] = {}
  
     # if only one result, make it a list of one result
     if type(vt_report_input) != list:
@@ -98,7 +97,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
             })
 
         #create cyber observable object dictionary - all AV classifications are nested under here
-        package['cybox']['objects'][instance_object_ref] = {
+        package['objects'][instance_object_ref] = {
             'type':'file',
             'hashes':{
                 'MD5': vt_report['md5'],
@@ -111,7 +110,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
         }
 
         #just getting a shorter reference to use
-        maec_av = package['cybox']['objects'][instance_object_ref]['extended_properties']['x-maec-avclass']
+        maec_av = package['objects'][instance_object_ref]['extended_properties']['x-maec-avclass']
 
         #iterate through all ofg VT results, add classifications to cyber observable object
         for k,v in vt_report['scans'].items():
