@@ -103,8 +103,12 @@ def vt_report_to_maec_package(vt_report_input, options = None):
         package['malware_instances'].append(
             {
                 'id': mixbox.idgen.create_id(prefix="malware_instance").split(":")[1],
-                'instance_object_ref': [ instance_object_ref ]
-            })
+                'instance_object_ref': [ instance_object_ref ],
+				'analyses':[
+					{
+						'summary':"Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"]
+            		}
+			})
 
         #create cyber observable object dictionary - all AV classifications are nested under here
         package['cybox']['objects'][instance_object_ref] = {
