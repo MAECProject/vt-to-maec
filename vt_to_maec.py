@@ -75,6 +75,6 @@ except vtp.APIKeyException as ex:
     sys.exit();
 
 with open(args.output, 'w') as fp: 
-	json.dump(package_result, fp)
+	json.dump(package_result, fp, indent =4)
 
 print "Wrote output to " + args.output

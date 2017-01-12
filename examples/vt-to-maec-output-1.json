@@ -1,10 +1,16 @@
 {
+    "type":"package",
     "id": "package-54f0d8fe-3c99-46f6-8798-1ba4a7f945c5",
     "schema_version": "5.0",
-    "description": "Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)",
     "malware_instances": [{
+        "type":"malware_instance",
         "instance_object_ref": ["malware_instance_object-386c3618-4e63-4e82-a5ac-3d546b8aceff"],
-        "id": "malware_instance-cfe57efb-d24d-4a7e-8d1b-4037d74c69bb"
+        "id": "malware_instance-cfe57efb-d24d-4a7e-8d1b-4037d74c69bb",
+        "analyses":[
+            {
+                "summary":"Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
+            }
+        ]
     }],
     "objects": {
       "malware_instance_object-386c3618-4e63-4e82-a5ac-3d546b8aceff": {
