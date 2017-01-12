@@ -30,7 +30,7 @@ Usage: python vt_to_maec.py [--hash] input output
 
 #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!
 # Before you can use this script, you must supply a VirusTotal API key
-API_KEY = "REPLACE THIS STRING WITH AN API KEY FROM https://www.virustotal.com"
+API_KEY = "REPLACE THIS STRING WITH AN API KEY FROM  https://www.virustotal.com"
 #!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#! 
 
 import virustotal_to_maec.virustotal_maec_packager as vtp
