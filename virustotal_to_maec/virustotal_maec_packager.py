@@ -88,7 +88,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
             continue
             
         #create instance object reference ID for the malware instance
-        instance_object_ref = mixbox.idgen.create_id(prefix="malware_instance_object").split(":")[1]
+        instance_object_ref = '0'
 
         #add malware instance to package
         package['malware_instances'].append(
@@ -111,13 +111,13 @@ def vt_report_to_maec_package(vt_report_input, options = None):
                 'SHA-1': vt_report['sha1'],
                 'SHA-256': vt_report['sha256']
             },
-            'extended_properties':{
+            'extensions':{
                 'x-maec-avclass': []
             }
         }
 
         #just getting a shorter reference to use
-        maec_av = package['objects'][instance_object_ref]['extended_properties']['x-maec-avclass']
+        maec_av = package['objects'][instance_object_ref]['extensions']['x-maec-avclass']
 
         #iterate through all ofg VT results, add classifications to cyber observable object
         for k,v in vt_report['scans'].items():
