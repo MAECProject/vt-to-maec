@@ -24,7 +24,7 @@ API_KEY = None
 
 def file_to_md5(path, blocksize=65536):
     """Return a hash of the file at filepath as an MD5 hex string."""
-    fd = open(path, "rb")
+    fd = open(path, 'rb')
     hasher = hashlib.md5()
     buf = fd.read(blocksize)
     while len(buf) > 0:
@@ -34,9 +34,12 @@ def file_to_md5(path, blocksize=65536):
     
 
 def vt_report_from_md5(input_md5, api_key=None, proxies=None):
-    """Accept a string of comma-separated MD5 hashes or a list of MD5 strings to use in fetching a report to VirusTotal.
-    Return a dictionary or list of dictionaries based on the fetched report's JSON.
-    Requires a VirusTotal API key as the second argument. Optionally accepts a dictionary of proxy settings ({ "http": ... })."""
+    """Accept a string of comma-separated MD5 hashes or a list of
+    MD5 strings to use in fetching a report to VirusTotal.
+    Return a dictionary or list of dictionaries based on the fetched
+    report's JSON. Requires a VirusTotal API key as the second argument.
+    Optionally accepts a dictionary of proxy settings ({ "http": ... })."""
+
     global API_KEY
     api_key = api_key or API_KEY
     
@@ -47,7 +50,7 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     if type(input_md5) == list:
         input_md5 = ",".join(input_md5)
         
-    parameters = { "resource": input_md5, "apikey": api_key }
+    parameters = {"resource": input_md5, "apikey": api_key}
     response = requests.get("http://www.virustotal.com/vtapi/v2/file/report", params=parameters, proxies=proxies)
     
     if response.text == "":
@@ -59,15 +62,15 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
 
 
 #in this version, the function returns a mere dictionary
-def vt_report_to_maec_package(vt_report_input, options = None):
+def vt_report_to_maec_package(vt_report_input, options=None):
    
    #creating package structure and inserting all package level fields
     package = {}
-    package['type']= 'package'
-    package['id'] = mixbox.idgen.create_id(prefix="package").split(":")[1]
-    package['schema_version'] = "5.0"
-    package['malware_instances'] = []
-    package['objects'] = {}
+    package["type"] = "package"
+    package["id"] = mixbox.idgen.create_id(prefix="package-").split(":")[1]
+    package["schema_version"] = "5.0"
+    package["maec_objects"] = []
+    package["observable_objects"] = {}
  
     # if only one result, make it a list of one result
     if type(vt_report_input) != list:
@@ -77,7 +80,7 @@ def vt_report_to_maec_package(vt_report_input, options = None):
 
     for idx, vt_report in enumerate(vt_report_list):
         # if VirusTotal has never seen this MD5
-        if vt_report['response_code'] == 0:
+        if vt_report["response_code"] == 0:
             sys.stderr.write("WARNING: Skipping file #" + str(idx+1) + " (" + vt_report["resource"] + "); this MD5 is unknown to VirusTotal\n")
             sys.stderr.flush();
             continue
@@ -87,48 +90,49 @@ def vt_report_to_maec_package(vt_report_input, options = None):
             sys.stderr.flush();
             continue
             
-        #create instance object reference ID for the malware instance
+        # create instance object reference ID for the malware instance
         instance_object_ref = '0'
 
-        #add malware instance to package
-        package['malware_instances'].append(
+        # add malware instance to package
+        package["maec_objects"].append(
             {
-                'type':'malware-instance',
-                'id': mixbox.idgen.create_id(prefix="malware_instance").split(":")[1],
-                'instance_object_ref': [ instance_object_ref ],
-				'analyses':[
+                "type": "malware-instance",
+                "id": mixbox.idgen.create_id(prefix="malware-instance-").split(":")[1],
+                "instance_object_refs": [instance_object_ref],
+				"analysis_metadata": [
 					{
-						'summary':"Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
+                        "is_automated": "True",
+                        "analysis_type": "static",
+						"description": "Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
             		}
                 ]
 			})
 
         #create cyber observable object dictionary - all AV classifications are nested under here
-        package['objects'][instance_object_ref] = {
-            'type':'file',
-            'hashes':{
-                'MD5': vt_report['md5'],
-                'SHA-1': vt_report['sha1'],
-                'SHA-256': vt_report['sha256']
-            },
-            'extensions':{
-                'x-maec-avclass': []
-            }
+        obsv_obj = package["observable_objects"][instance_object_ref] = {}
+        obsv_obj["type"] = "file"
+        obsv_obj["hashes"] = {
+            "MD5": vt_report["md5"],
+            "SHA-1": vt_report["sha1"],
+            "SHA-256": vt_report["sha256"]
         }
-
+        obsv_obj["extensions"] = {
+            "x-maec-avclass": []
+        }
+        
         #just getting a shorter reference to use
-        maec_av = package['objects'][instance_object_ref]['extensions']['x-maec-avclass']
+        maec_av = package["observable_objects"][instance_object_ref]["extensions"]["x-maec-avclass"]
 
         #iterate through all ofg VT results, add classifications to cyber observable object
-        for k,v in vt_report['scans'].items():
+        for k,v in vt_report["scans"].iteritems():
             tmp = {}
-            tmp['classification_name'] = v['result']
-            tmp['scan_date'] = vt_report['scan_date']
-            tmp['is_detected'] = v['detected']
-            tmp['av_name'] = k
-            tmp['av_vendor'] = k
-            tmp['av_engine_version'] = v['version']
-            tmp['av_definition_version'] = v['update']
+            tmp["classification_name"] = v["result"]
+            tmp["scan_date"] = vt_report["scan_date"]
+            tmp["is_detected"] = v["detected"]
+            tmp["av_name"] = k
+            tmp["av_vendor"] = k
+            tmp["av_engine_version"] = v["version"]
+            tmp["av_definition_version"] = v["update"]
 
             maec_av.append(tmp)
        

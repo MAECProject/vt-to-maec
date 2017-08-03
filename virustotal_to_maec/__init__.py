@@ -10,10 +10,10 @@
 #Updated 09/08/2014 for MAEC v4.1 and CybOX v2.1
 
 #Standalone package for fetching VirusTotal results and converting them to MAEC packages
-
-import virustotal_maec_packager as vtpack
-from maec.package.package import Package
+import hashlib
 import json
+from maec.package.package import Package
+import virustotal_maec_packager as vtpack
 
 __version__ = "0.11"
 
@@ -26,7 +26,7 @@ def generate_package_from_report_filepath(input_path, options = None):
         vt_file = open(input_path, 'r')
         vt_dict = json.load(vt_file)
     except:
-        print('\nError: Error in parsing input file. Please check to ensure that it is valid JSON.')
+        print("\nError: Error in parsing input file. Please check to ensure that it is valid JSON.")
         return
     
     return vtpack.vt_report_to_maec_package(vt_dict, options)
@@ -34,12 +34,12 @@ def generate_package_from_report_filepath(input_path, options = None):
 def generate_package_from_binary_filepath(input_path, options = None):
     """Take a file path to a binary file, try to look up its VirusTotal report by MD5, 
        and return a MAEC package object if a report is found."""
-    import hashlib
     # create MD5
     blocksize = 65536
     fd = open(input_path, "rb")
     hasher = hashlib.md5()
     buf = fd.read(blocksize)
+
     while len(buf) > 0:
         hasher.update(buf)
         buf = fd.read(blocksize)
