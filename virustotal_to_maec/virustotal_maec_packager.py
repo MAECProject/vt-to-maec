@@ -99,14 +99,14 @@ def vt_report_to_maec_package(vt_report_input, options=None):
                 "type": "malware-instance",
                 "id": mixbox.idgen.create_id(prefix="malware-instance-").split(":")[1],
                 "instance_object_refs": [instance_object_ref],
-				"analysis_metadata": [
-					{
-                        "is_automated": "True",
+                "analysis_metadata": [
+                    {
+                        "is_automated": True,
                         "analysis_type": "static",
-						"description": "Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
-            		}
+                        "description": "Created by VirusTotal to MAEC (http://github.com/MAECProject/vt-to-maec)"
+                    }
                 ]
-			})
+            })
 
         #create cyber observable object dictionary - all AV classifications are nested under here
         obsv_obj = package["observable_objects"][instance_object_ref] = {}
