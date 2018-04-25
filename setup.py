@@ -1,10 +1,12 @@
-# Copyright (c) 2015, The MITRE Corporation. All rights reserved.
+# Copyright (c) 2018, The MITRE Corporation. All rights reserved.
 # See LICENSE.txt for complete terms.
 
 from os.path import abspath, dirname, join
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 INIT_FILE = join(dirname(abspath(__file__)), 'virustotal_to_maec', '__init__.py')
+
 
 def get_version():
     with open(INIT_FILE) as f:
@@ -14,8 +16,10 @@ def get_version():
                 return version
         raise AttributeError("Package does not have a __version__")
 
+
 with open('README.rst') as f:
     readme = f.read()
+
 
 setup(
     name="virustotal_to_maec",

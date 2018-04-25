@@ -1,10 +1,10 @@
 vt-to-maec
 ==========
 
-VirusTotal fetcher and VirusTotal report --> MAEC XML Converter Utility
-v0.11 BETA - Updated 09/08/2014
+VirusTotal fetcher and VirusTotal report --> MAEC JSON Converter Utility
+v0.1 Updated 04/25/2018
 
-Copyright (c) 2015 The MITRE Corporation
+Copyright (c) 2018 The MITRE Corporation
 BY USING THE VIRUSTOTAL TO MAEC SCRIPT AND MODULE, YOU SIGNIFY YOUR
 ACCEPTANCE OF THE TERMS AND CONDITIONS OF USE. IF YOU DO NOT AGREE TO
 THESE TERMS, DO NOT USE THE SCRIPT.
@@ -16,17 +16,15 @@ VirusTotal API key (in the ``API_KEY`` variable in ``vt_to_maec``).
 Given a list of MD5 hashes and/or file paths, this script fetches the
 VirusTotal reports for each file and outputs MAEC data about each file.
 
-Compatible with MAEC Schema v4.1 & Cyber Observable eXpression (CybOX™) 2.1.
+Compatible with MAEC Schema v5.0
 
 * MAEC - http://maecproject.github.io/
 * VirusTotal - https://www.virustotal.com
-* CybOX - http://cyboxproject.github.io/
 
 Requirements
 ============
 
 -  python-maec >= v4.1.0.9
--  python-cybox >= v2.1.0.8
 -  Before you can run the ``vt_to_maec.py`` script for the first time,
    you must get a VirusTotal API key from https://www.virustotal.com and
    use it as the ``API_KEY`` variable at the top of the script.
