@@ -23,7 +23,7 @@ proxies = {}
 api_key = ""
 
 
-def generate_package_from_report_filepath(input_path, options=None):
+def generate_package_from_report_filepath(input_path):
     """Take a file path to a VirusTotal report and return a
     MAEC package object."""
     try:
@@ -35,10 +35,10 @@ def generate_package_from_report_filepath(input_path, options=None):
         print(str(e))
         return
 
-    return vtpack.vt_report_to_maec_package(vt_dict, options)
+    return vtpack.vt_report_to_maec_package(vt_dict)
 
 
-def generate_package_from_binary_filepath(input_path, options=None):
+def generate_package_from_binary_filepath(input_path):
     """Take a file path to a binary file, try to look up its VirusTotal
     report by MD5, and return a MAEC package object if a report is found."""
     # create MD5
@@ -54,19 +54,16 @@ def generate_package_from_binary_filepath(input_path, options=None):
     return generate_package_from_md5(hasher.hexdigest())
 
 
-def generate_package_from_md5(input_md5, options=None):
+def generate_package_from_md5(input_md5):
     """Take an MD5 string, try to look up its VirusTotal report,
     and return a MAEC package object if a report is found."""
-    return vtpack.vt_report_to_maec_package(
-                                            vtpack.vt_report_from_md5(input_md5, api_key, proxies),
-                                            options
-                                            )
+    return vtpack.vt_report_to_maec_package(vtpack.vt_report_from_md5(input_md5, api_key, proxies))
 
 
-def generate_package_from_report_string(input_string, options=None):
+def generate_package_from_report_string(input_string):
     """Take a VT report as a string and return a MAEC package object."""
     vt_dict = json.loads(input_string)
-    return vtpack.vt_report_to_maec_package(vt_dict, options)
+    return vtpack.vt_report_to_maec_package(vt_dict)
 
 
 def set_proxies(proxy=None):

@@ -68,7 +68,7 @@ def vt_report_from_md5(input_md5, api_key=None, proxies=None):
     return response.json()
 
 
-def vt_report_to_maec_package(vt_report_input, options=None):
+def vt_report_to_maec_package(vt_report_input):
     """Virus Total report to MAEC 5.0 Package in JSON"""
 
     # creating package structure and inserting all package level fields

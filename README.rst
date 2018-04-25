@@ -24,7 +24,6 @@ Compatible with MAEC Schema v5.0
 Requirements
 ============
 
--  python-maec >= v4.1.0.9
 -  Before you can run the ``vt_to_maec.py`` script for the first time,
    you must get a VirusTotal API key from https://www.virustotal.com and
    use it as the ``API_KEY`` variable at the top of the script.

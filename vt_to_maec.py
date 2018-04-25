@@ -41,7 +41,6 @@ import sys
 
 import virustotal_to_maec
 import virustotal_to_maec.virustotal_maec_packager as vtp
-from maec.misc.options import ScriptOptions
 
 proxies = {
     # "http":"http://example.com:80",
@@ -53,16 +52,8 @@ parser.add_argument("input", help="the MD5 hash or path of the input binary file
 parser.add_argument("output", help="the name of the file to which the MAEC XML output will be written")
 parser.add_argument("--md5", "--hash", help="indicates input is an MD5 hash of the file to be fetched and analyzed", action="store_true", default=False)
 parser.add_argument("--verbose", "-v", help="enable verbose error output mode", action="store_true", default=False)
-parser.add_argument("--deduplicate", "-dd", help="deduplicate the MAEC output (Objects only)", action="store_true", default=False)
-parser.add_argument("--normalize", "-n", help="normalize the MAEC output (Objects only)", action="store_true", default=False)
-parser.add_argument("--dereference", "-dr", help="dereference the MAEC output (Objects only)", action="store_true", default=False)
 args = parser.parse_args()
 
-# Build up the options instance based on the command-line input
-options = ScriptOptions()
-options.deduplicate_bundles = args.deduplicate
-options.normalize_bundles = args.normalize
-options.dereference_bundles = args.dereference
 
 virustotal_to_maec.set_api_key(API_KEY)
 virustotal_to_maec.set_proxies(proxies)
@@ -70,9 +61,9 @@ virustotal_to_maec.set_proxies(proxies)
 # fetch VT report and generate Package object
 try:
     if args.md5:
-        package_result = virustotal_to_maec.generate_package_from_md5(args.input, options)
+        package_result = virustotal_to_maec.generate_package_from_md5(args.input)
     else:
-        package_result = virustotal_to_maec.generate_package_from_binary_filepath(args.input, options)
+        package_result = virustotal_to_maec.generate_package_from_binary_filepath(args.input)
 except vtp.APIKeyException as ex:
     sys.stderr.write("VirusTotal API request failed. You must edit this script with your VirusTotal API key in the API_KEY variable.")
     sys.exit()
