@@ -1,3 +1,5 @@
-The example_maec_out.xml file demonstrates a sample output for the vt-to-maec script, as run against 0efade6825e49cf0cf9c87695d466157 using the following command-line:
+The *vt-to-maec-output-1.json* file demonstrates a sample output for the vt-to-maec script, as run against e0fb946c00b140693e3cf5de258c22a1 using the following command-line:
 
-`python vt-to-maec.py -h 0efade6825e49cf0cf9c87695d466157 -o example_maec_out.xml`
+`python vt_to_maec.py --md5 e0fb946c00b140693e3cf5de258c22a1  vt-to-maec-output-1.json`
+
+The other sample files were created in the same manner.
