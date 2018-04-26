@@ -33,13 +33,12 @@ Usage
 
 ``python vt_to_maec.py <input binary file path or MD5> [--md5] [--verbose]``
 
-- ``--md5``, ``--hash``: specifies that the input is an MD5 hash rather
-than a binary file path.
+- ``--md5``, ``--hash``: specifies that the input is an MD5 hash rather than a binary file path.
 
 Standalone Module
 =================
 
-The ``virus_total_to_maec`` package exposes several helper functions:
+The ``virustotal_to_maec`` package exposes several helper functions:
 
 -  ``generate_package_from_binary_filepath`` - given an filepath, return
    a MAEC Package in JSON
