@@ -3,7 +3,7 @@
 *                                                    *
 *      VirusTotal -> MAEC XML Script                 *
 *                                                    *
-*      Copyright (c) 2015, The MITRE Corporation     *
+*      Copyright (c) 2018, The MITRE Corporation     *
 *                                                    *
 ******************************************************
 
