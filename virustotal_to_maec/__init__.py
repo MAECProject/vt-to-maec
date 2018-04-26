@@ -40,7 +40,7 @@ def generate_package_from_report_filepath(input_path):
 
 def generate_package_from_binary_filepath(input_path):
     """Take a file path to a binary file, try to look up its VirusTotal
-    report by MD5, and return a MAEC package object if a report is found."""
+    report by MD5, and return a MAEC package in JSON if a report is found."""
     # create MD5
     blocksize = 65536
     fd = open(input_path, "rb")
@@ -56,12 +56,12 @@ def generate_package_from_binary_filepath(input_path):
 
 def generate_package_from_md5(input_md5):
     """Take an MD5 string, try to look up its VirusTotal report,
-    and return a MAEC package object if a report is found."""
+    and return a MAEC package in JSON if a report is found."""
     return vtpack.vt_report_to_maec_package(vtpack.vt_report_from_md5(input_md5, api_key, proxies))
 
 
 def generate_package_from_report_string(input_string):
-    """Take a VT report as a string and return a MAEC package object."""
+    """Take a VT report as a string and return a MAEC package in JSON"""
     vt_dict = json.loads(input_string)
     return vtpack.vt_report_to_maec_package(vt_dict)
 
@@ -70,9 +70,9 @@ def set_proxies(proxy=None):
     """Set network proxies to use for querying VT,
 
     Args:
-        proxy (dict): keys are protocol names and
-          values are proxy addresses; e.g.
-          { 'http':'http://example.com:80' }."""
+        proxy (dict): keys are protocol names and values are proxy addresses;
+          e.g. { 'http':'http://example.com:80' }.
+    """
     if not proxy:
         proxy = {}
 

@@ -49,7 +49,7 @@ proxies = {
 
 parser = argparse.ArgumentParser(description="VirusTotal to MAEC Translator")
 parser.add_argument("input", help="the MD5 hash or path of the input binary file")
-parser.add_argument("output", help="the name of the file to which the MAEC XML output will be written")
+parser.add_argument("output", help="the name of the file to which the MAEC JSON output will be written")
 parser.add_argument("--md5", "--hash", help="indicates input is an MD5 hash of the file to be fetched and analyzed", action="store_true", default=False)
 parser.add_argument("--verbose", "-v", help="enable verbose error output mode", action="store_true", default=False)
 args = parser.parse_args()

@@ -35,9 +35,6 @@ Usage
 
 - ``--md5``, ``--hash``: specifies that the input is an MD5 hash rather
 than a binary file path.
-- ``--deduplicate``, ``-dd``: deduplicate objects in MAEC output
-- ``--dereference``, ``-dr``: dereference the MAEC output
-- ``--normalize``, ``-n``: normalize the MAEC output
 
 Standalone Module
 =================
@@ -45,11 +42,11 @@ Standalone Module
 The ``virus_total_to_maec`` package exposes several helper functions:
 
 -  ``generate_package_from_binary_filepath`` - given an filepath, return
-   a python-maec Pacakge object
+   a MAEC Package in JSON
 -  ``generate_package_from_md5`` - given an MD5 string, return a
-   python-maec Pacakge object
+   MAEC Package in JSON
 -  ``generate_package_from_report_string`` - given a VirusTotal JSON
-   report, return a python-maec Pacakge object
+   report, return a MAEC Package in JSON
 -  ``set_proxies`` - optionally called to supply proxy information to
    the package; supplied as a dictionary like
    ``{ "http": "http://example.com:80", ... }``
